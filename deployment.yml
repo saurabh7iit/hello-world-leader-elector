@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hello-world-deployment
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels: # labels to select/identify the deployment
+        app: hello-world  
+    spec:     # pod spec                  
+      containers: 
+      - name: hello-world 
+        image: saurabh7verma/hello-world-example # image we pushed
+        ports:
+        - containerPort: 3000
+      - name: leader-election-test
+        image: "k8s.gcr.io/leader-elector:0.5"
+        args:
+        - --election=hello-world
+        - --http=0.0.0.0:4040
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 4040 
